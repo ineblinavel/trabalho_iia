@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Suas Preferências Iniciais</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashed-messages">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <h1>👋 Bem-vindo(a)!</h1>
+        <p style="text-align: center;">Para começarmos, conte-nos um pouco sobre seus gostos. Isso nos ajudará a fazer
+            melhores recomendações para você.</p>
+
+        <form action="{{ url_for('save_initial_preferences') }}" method="post">
+            <div class="form-group">
+                <label for="name">Seu Nome ou Apelido: <span class="optional-text">(Opcional)</span></label>
+                <input type="text" id="name" name="user_name" placeholder="Ex: João Agricultor">
+            </div>
+
+            <div class="form-group">
+                <label for="preferred_categories">Quais categorias de produtos mais te interessam?</label>
+                <p style="font-size: 0.9em; color: #666;">Selecione quantas quiser. Isso nos ajudará a mostrar produtos
+                    relevantes.</p>
+                {% if categories %}
+                {% for category in categories %}
+                <div class="checkbox-group">
+                    <input type="checkbox" id="category_{{ loop.index }}" name="preferred_categories"
+                        value="{{ category }}">
+                    <label for="category_{{ loop.index }}" class="checkbox-label">{{ category }}</label>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>Nenhuma categoria de produto disponível para seleção no momento.</p>
+                {% endif %}
+            </div>
+            <style>
+                /* Estilo específico para checkboxes aqui para simplicidade, pode mover para CSS */
+                .checkbox-group {
+                    margin-bottom: 8px;
+                }
+
+                .checkbox-label {
+                    font-weight: normal;
+                    margin-left: 5px;
+                    display: inline;
+                }
+
+                input[type="checkbox"] {
+                    width: auto;
+                    margin-right: 5px;
+                    vertical-align: middle;
+                }
+            </style>
+
+            <div class="form-group">
+                <p style="text-align: center; margin-top: 25px;">
+                    Sua localização nos ajuda a encontrar produtores próximos.
+                </p>
+                <button type="button" id="getLocationBtn" class="btn-secondary">📍 Usar Minha Localização Atual</button>
+                <p id="locationStatus"></p>
+                <div>
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" id="latitude" name="latitude" placeholder="Ex: -15.793889" required>
+                </div>
+                <div>
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" id="longitude" name="longitude" placeholder="Ex: -47.882778" required>
+                </div>
+            </div>
+
+            <input type="submit" value="Salvar Preferências e Ver Recomendações">
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="{{ url_for('skip_initial_preferences') }}">Pular e ver recomendações populares</a>
+        </p>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

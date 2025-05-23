@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}Busca Agrícola{% endblock %}
+{% block page_title %}🔎 Busca Agrícola Inteligente{% endblock %}
+
+{% block content %}
+<p style="text-align: center;">Encontre cooperativas e produtos frescos perto de você ou receba recomendações
+    personalizadas.</p>
+
+<form action="{{ url_for('search_route') }}" method="post"> {# Rota atualizada #}
+    <div class="form-group">
+        <button type="button" id="getLocationBtn" class="btn-secondary">📍 Usar Minha Localização Atual</button>
+        <p id="locationStatus"></p>
+    </div>
+
+    <div class="form-group">
+        <label for="latitude">Sua Latitude:<span class="optional-text">(Padrão: {{ "%.6f"|format(default_location[0])
+                }})</span></label>
+        <input type="text" id="latitude" name="latitude" value="{{ request.form.latitude or default_location[0] }}"
+            placeholder="Ex: -15.793889">
+    </div>
+    <div class="form-group">
+        <label for="longitude">Sua Longitude:<span class="optional-text">(Padrão: {{ "%.6f"|format(default_location[1])
+                }})</span></label>
+        <input type="text" id="longitude" name="longitude" value="{{ request.form.longitude or default_location[1] }}"
+            placeholder="Ex: -47.882778">
+    </div>
+    <div class="form-group">
+        <label for="search_intent_product">Produto que busca AGORA:<span class="optional-text">(Opcional)</span></label>
+        <select id="search_intent_product" name="search_intent_product">
+            <option value="">-- Nenhum específico --</option>
+            {% for product in products_list %}
+            <option value="{{ product }}" {% if request.form.search_intent_product==product %}selected{% endif %}>{{
+                product }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="preferred_categories_search">Filtrar por Categorias:<span class="optional-text">(Opcional, selecione
+                múltiplas com Ctrl/Cmd)</span></label>
+        <select id="preferred_categories_search" name="preferred_categories_search" multiple size="5">
+            {% for category in categories_list %}
+            <option value="{{ category }}" {% if category in (request.form.getlist('preferred_categories_search') or [])
+                %}selected{% endif %}>{{ category }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="max_distance">Distância Máxima de Busca (km):<span class="optional-text">(Padrão: {{
+                default_max_distance_km }} km)</span></label>
+        <input type="number" id="max_distance" name="max_distance"
+            value="{{ request.form.max_distance or default_max_distance_km }}" placeholder="Ex: 20" min="1">
+    </div>
+    <input type="submit" value="Buscar Cooperativas e Produtos" class="btn-primary">
+</form>
+{% endblock %}

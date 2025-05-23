@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Recomendador Agrícola{% endblock %}</title>
+    <!-- Leaflet CSS (apenas se a página específica usar mapa) -->
+    {% if page_uses_map %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head_extra %}{% endblock %} <!-- Para CSS ou meta tags específicas da página -->
+</head>
+
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashed-messages">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <header>
+            <h1>{% block page_title %}Bem-vindo!{% endblock %}</h1>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">Nova
+                    Busca</a>
+                {# user_id é passado pelo Flask para todas as rotas autenticadas/com sessão #}
+                {% if user_id %}
+                <a href="{{ url_for('for_you_recommendations_route') }}"
+                    class="{{ 'active' if request.endpoint == 'for_you_recommendations_route' else '' }}">Para Você</a>
+                <a href="{{ url_for('my_ratings') }}"
+                    class="{{ 'active' if request.endpoint == 'my_ratings' else '' }}">Minhas Avaliações</a>
+                <a href="{{ url_for('logout') }}">Sair (Usuário {{ user_id }})</a>
+                {% elif not hide_initial_prefs_link %} {# Controla se o link de prefs iniciais aparece #}
+                <a href="{{ url_for('initial_preferences_route') }}"
+                    class="{{ 'active' if request.endpoint == 'initial_preferences_route' else '' }}">Começar (Novo
+                    Usuário)</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p style="text-align:center; margin-top:30px; font-size:0.9em; color:#777;">
+                Sistema de Recomendação Agrícola © {{ now.year if now else '2024' }}
+            </p>
+        </footer>
+    </div>
+
+    <!-- Leaflet JavaScript (apenas se a página específica usar mapa) -->
+    {% if page_uses_map %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ url_for('static', filename='js/map_display.js') }}"></script>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts_extra %}{% endblock %} <!-- Para JS específico da página -->
+</body>
+
+</html>

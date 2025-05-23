@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Minhas Avaliações{% endblock %}
+{% block page_title %}📜 Minhas Avaliações{% endblock %}
+
+{% block content %}
+{% if ratings is not none and not ratings.empty %}
+<p>Aqui estão todos os produtos que você avaliou até agora.</p>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Cooperativa</th>
+            <th>Sua Avaliação</th>
+            <th>Data da Avaliação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, rating_item in ratings.iterrows() %}
+        <tr>
+            <td>{{ rating_item['product_name'] }}</td>
+            <td>{{ rating_item['cooperative_name'] }}</td>
+            <td>
+                {% for i in range(rating_item['rating']|int) %}⭐{% endfor %}
+                ({{ rating_item['rating'] }})
+            </td>
+            <td>{{ rating_item['formatted_timestamp'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="no-ratings">Você ainda não avaliou nenhum produto. <br>Suas avaliações aparecerão aqui assim que você começar
+    a avaliar os produtos encontrados!</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,361 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    /* Removido margin 20px para o layout base controlar */
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    /* Aumentado um pouco para mais conteúdo */
+    margin: 30px auto;
+    /* Centralizado e com margem no topo/baixo */
+}
+
+h1,
+h2,
+h3 {
+    color: #333;
+    margin-bottom: 0.75em;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2em;
+    color: #4CAF50;
+    /* Verde mais vibrante */
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.5em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+
+h3 {
+    font-size: 1.2em;
+    color: #5cb85c;
+    /* Verde usado nos exemplos */
+    margin-top: 0;
+}
+
+p {
+    margin: 0 0 10px 0;
+}
+
+a {
+    color: #5cb85c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navigation Links */
+.nav-links {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-links a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 15px;
+    border: 1px solid #5cb85c;
+    border-radius: 4px;
+    color: #5cb85c;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Forms */
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+/* Adicionado para consistência futura */
+select,
+textarea {
+    width: calc(100% - 22px);
+    /* Ajustar se o padding/border mudar */
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+input[type="submit"],
+button.btn-primary,
+button.btn-secondary {
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    /* Consistente com inputs */
+    margin-top: 20px;
+    /* Mais espaço acima do botão */
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"],
+button.btn-primary {
+    background-color: #5cb85c;
+    /* Botão primário verde */
+}
+
+input[type="submit"]:hover,
+button.btn-primary:hover {
+    background-color: #4cae4c;
+}
+
+button.btn-secondary {
+    background-color: #5bc0de;
+    /* Botão secundário (ex: geolocalização) */
+}
+
+button.btn-secondary:hover {
+    background-color: #46b8da;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.optional-text {
+    font-size: 0.85em;
+    color: #777;
+    margin-left: 8px;
+    font-weight: normal;
+}
+
+#locationStatus {
+    font-size: 0.9em;
+    color: #337ab7;
+    margin-top: 5px;
+    text-align: center;
+    min-height: 1.2em;
+    /* Evita pulo de layout */
+}
+
+/* Recommendation Cards */
+.recommendation {
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 20px;
+    /* Mais espaço entre cards */
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Rating Form specific styles */
+.rating-form {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ddd;
+}
+
+.rating-form label {
+    font-weight: normal;
+    font-size: 0.95em;
+    margin-right: 8px;
+    color: #333;
+}
+
+.rating-form select {
+    padding: 6px 8px;
+    width: auto;
+    /* Para não ocupar 100% */
+    margin-right: 8px;
+    font-size: 0.95em;
+}
+
+.rating-form input[type="submit"] {
+    background-color: #f0ad4e;
+    /* Laranja para ação de avaliação */
+    color: white;
+    font-size: 0.9em;
+    padding: 7px 12px;
+    width: auto;
+    /* Para não ocupar 100% */
+    margin-top: 0;
+    /* Alinha com o select */
+}
+
+.rating-form input[type="submit"]:hover {
+    background-color: #ec971f;
+}
+
+/* Flashed Messages (globais) */
+.flashed-messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    /* Margem inferior para separar do conteúdo */
+}
+
+.flashed-messages li {
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.flashed-messages li.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.flashed-messages li.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.flashed-messages li.info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Notices and specific info blocks */
+.notice,
+.info-box {
+    text-align: center;
+    margin: 20px 0;
+    /* Consistente com outras margens */
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.notice {
+    /* Para mensagens de "ainda não há avaliações" etc. */
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.info-box {
+    /* Para cabeçalhos de informação como localização e distância */
+    background-color: #e7f3fe;
+    border: 1px solid #b3d7ff;
+    color: #31708f;
+    text-align: left;
+    /* Informações geralmente são melhor alinhadas à esquerda */
+}
+
+.info-box p {
+    margin-bottom: 5px;
+}
+
+.info-box p:last-child {
+    margin-bottom: 0;
+}
+
+
+.existing-rating-info {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e7f3fe;
+    border: 1px solid #b3d7ff;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.existing-rating-info p {
+    margin: 4px 0;
+    color: #31708f;
+}
+
+.change-rating-prompt {
+    font-style: italic;
+    font-size: 0.95em;
+    color: #555 !important;
+    /* Herdando do recommendation p */
+    margin-top: 5px !important;
+}
+
+/* Table Styling (for my_ratings.html) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    /* Mais padding */
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+    /* Cinza mais claro para cabeçalho */
+    color: #333;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Alternância de cor sutil */
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+    /* Efeito hover para linhas */
+}
+
+.no-ratings {
+    text-align: center;
+    color: #777;
+    margin-top: 30px;
+    font-size: 1.1em;
+}
+
+/* Map Styling */
+#map {
+    height: 400px;
+    /* Padrão */
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

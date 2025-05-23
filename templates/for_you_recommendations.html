@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}Recomendações Para Você{% endblock %}
+{% block page_title %}🌟 Recomendações Para Você 🌟{% endblock %}
+
+{% set page_uses_map = True %}
+
+{% block content %}
+<div class="info-box">
+    <p>Estas recomendações são baseadas nas suas avaliações e preferências, priorizando itens próximos de você.</p>
+    <p><strong>Sua Localização Padrão:</strong> Lat {{ "%.4f"|format(location[0]) }}, Lon {{ "%.4f"|format(location[1])
+        }}</p>
+    <p><strong>Distância máxima considerada:</strong> {{ max_distance }} km</p>
+</div>
+
+<div id="map" data-user-lat="{{ location[0] }}" data-user-lon="{{ location[1] }}"
+    data-recommendations="{{ recommendations.to_json(orient='records', force_ascii=False) if recommendations is not none and not recommendations.empty else '[]' }}">
+</div>
+
+{% if recommendations is not none and not recommendations.empty %}
+<h2>Top {{ recommendations|length }} Recomendaç{% if recommendations|length > 1 %}ões{% else %}ão{% endif %}:</h2>
+{% for index, rec in recommendations.iterrows() %}
+<div class="recommendation">
+    <h3>🛒 {{ rec['ProductName'] }}</h3>
+    <p><strong>Motivo:</strong> {{ rec['Reason'] }}</p>
+    <p style="margin-bottom: 10px;"><em>(Score de relevância: {{ "%.2f"|format(rec['RelevanceScore']|float) }})</em></p>
+
+    <hr style="border:0; border-top: 1px dashed #eee; margin: 10px 0;">
+
+    <p><strong>Cooperativa:</strong> {{ rec['CooperativeName'] }}</p>
+    {% if rec['Region'] and rec['Region'] != 'nan' %}<p><strong>Região Atendida:</strong> {{ rec['Region'] }}</p>{%
+    endif %}
+    <p><strong>Preço Estimado:</strong> R$ {{ "%.2f"|format(rec['Price']|float) }}</p>
+    <p><strong>Distância:</strong> {{ "%.1f"|format(rec['Distance_km']|float) }} km
+        <a href="https://www.google.com/maps/search/?api=1&query={{rec['Latitude']}},{{rec['Longitude']}}"
+            target="_blank" style="font-size:0.8em; margin-left:5px;">(Ver no Google Maps)</a>
+    </p>
+    <p>
+        {% if rec['Organic'] %}🌿 Orgânico {% endif %}
+        {% if rec['FamilyFarm'] %}👨‍🌾 Agricultura Familiar {% endif %}
+    </p>
+
+    {% set product_coop_key = (rec['ProductName'], rec['CooperativeName']) %}
+    <form action="{{ url_for('rate_product') }}" method="post" class="rating-form">
+        <input type="hidden" name="cooperative_name" value="{{ rec['CooperativeName'] }}">
+        <input type="hidden" name="product_name" value="{{ rec['ProductName'] }}">
+        <label for="rating-foryou-{{index}}">
+            {% if product_coop_key in user_product_ratings %}Sua Avaliação ({{ user_product_ratings[product_coop_key] }}
+            ⭐):{% else %}Avalie este produto:{% endif %}
+        </label>
+        <select name="rating" id="rating-foryou-{{index}}">
+            <option value="5" {% if product_coop_key in user_product_ratings and
+                user_product_ratings[product_coop_key]|int==5 %}selected{% endif %}>⭐⭐⭐⭐⭐ (Excelente)</option>
+            <option value="4" {% if product_coop_key in user_product_ratings and
+                user_product_ratings[product_coop_key]|int==4 %}selected{% endif %}>⭐⭐⭐⭐ (Muito Bom)</option>
+            <option value="3" {% if product_coop_key in user_product_ratings and
+                user_product_ratings[product_coop_key]|int==3 %}selected{% endif %}>⭐⭐⭐ (Bom)</option>
+            <option value="2" {% if product_coop_key in user_product_ratings and
+                user_product_ratings[product_coop_key]|int==2 %}selected{% endif %}>⭐⭐ (Razoável)</option>
+            <option value="1" {% if product_coop_key in user_product_ratings and
+                user_product_ratings[product_coop_key]|int==1 %}selected{% endif %}>⭐ (Ruim)</option>
+            {% if product_coop_key not in user_product_ratings %} <option value="" selected disabled hidden>Selecione
+            </option> {% endif %}
+        </select>
+        <input type="submit"
+            value="{% if product_coop_key in user_product_ratings %}Alterar{% else %}Avaliar{% endif %}">
+    </form>
+    {% if product_coop_key in user_product_ratings %}
+    <p class="change-rating-prompt" style="font-size:0.85em; text-align:right;">Você já avaliou este item. Uma nova
+        avaliação substituirá a anterior.</p>
+    {% endif %}
+</div>
+{% endfor %}
+{% else %}
+{% if not user_has_ratings %}
+<p class="notice">👋 Ainda não temos avaliações suas! <br> Use a "Nova Busca", encontre produtos e avalie-os para que
+    possamos gerar recomendações personalizadas aqui.</p>
+<p style="text-align:center; margin-top:15px;">
+    <a href="{{ url_for('initial_preferences_route') }}" class="btn-primary"
+        style="width:auto; padding: 10px 20px;">Definir Preferências Iniciais</a>
+</p>
+{% else %}
+<p class="notice" style="color: #d9534f;">🙁 Nenhuma recomendação personalizada encontrada no momento. <br> Tente
+    avaliar mais produtos ou ajuste sua localização padrão nas preferências (se aplicável).</p>
+{% endif %}
+{% endif %}
+{% endblock %}
