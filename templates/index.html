@@ -7,7 +7,7 @@
 <p style="text-align: center;">Encontre cooperativas e produtos frescos perto de você ou receba recomendações
     personalizadas.</p>
 
-<form action="{{ url_for('search_route') }}" method="post"> {# Rota atualizada #}
+<form action="{{ url_for('search_route') }}" method="post">
     <div class="form-group">
         <button type="button" id="getLocationBtn" class="btn-secondary">📍 Usar Minha Localização Atual</button>
         <p id="locationStatus"></p>
@@ -45,6 +45,22 @@
             {% endfor %}
         </select>
     </div>
+
+    <div class="form-group">
+        <label>Filtros Adicionais:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" id="organic_filter" name="organic_filter" {% if request.form.organic_filter=='on'
+                %}checked{% endif %}>
+            <label for="organic_filter" class="checkbox-label">🌿 Apenas Produtos Orgânicos</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="family_farm_filter" name="family_farm_filter" {% if
+                request.form.family_farm_filter=='on' %}checked{% endif %}>
+            <label for="family_farm_filter" class="checkbox-label">👨‍🌾 Apenas Agricultura Familiar</label>
+        </div>
+    </div>
+
+
     <div class="form-group">
         <label for="max_distance">Distância Máxima de Busca (km):<span class="optional-text">(Padrão: {{
                 default_max_distance_km }} km)</span></label>

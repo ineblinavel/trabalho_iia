@@ -1,0 +1,59 @@
+user_id,item_id,rating,timestamp,cooperative_name
+1,Limão,3,2025-05-24T01:06:41.038938,Associação Agrícola do Distrito Federal e Ride (Agrifam)
+1,Manga,5,2025-05-24T01:06:41.039185,Associação dos Produtores Rurais de Alexandre Gusmão (AsSpag)
+1,Uva,3,2025-05-24T01:06:41.039423,Associação dos Produtores Rurais de Alexandre Gusmão (AsSpag)
+1,Pitaia,4,2025-05-24T01:06:41.039655,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+1,Gengibre,3,2025-05-24T01:06:41.039887,Cooperativa Agropecuária da Região de Brazlândia (Coopebraz)
+2,Tangerina,5,2025-05-24T01:06:41.040123,Cooperativa Agrícola Buriti Vermelho (Cooper-Horti)
+2,Limão,5,2025-05-24T01:06:41.040346,Cooperativa Agrícola da Região de Planaltina (Cootaquara)
+2,Coco,5,2025-05-24T01:06:41.040567,Cooperativa de Agricultura Familiar Mista do Distrito Federal (Coopermista)
+2,Uva,3,2025-05-24T01:06:41.040774,Associação dos Produtores do Núcleo Rural Lago Oeste (ASPROESTE)
+2,Quiabo,4,2025-05-24T01:06:41.040980,Associação dos Produtores do Núcleo Rural Lago Oeste (ASPROESTE)
+3,Tangerina,5,2025-05-24T01:06:41.041192,Associação dos Produtores Rurais Novo Horizonte Betinho (Aspronte)
+3,Cebola,3,2025-05-24T01:06:41.041399,"Cooperativa de Serviços Ambientais, Agricultura Familiar, Sociedade,Cultura e Saúde (CooperBrasilia)"
+3,Pepino,5,2025-05-24T01:06:41.041603,Associação dos Produtores da Agricultura Familiar (Aspaf )
+3,Milho doce,3,2025-05-24T01:06:41.041805,Cooperativa Agrícola Buriti Vermelho (Cooper-Horti)
+3,Jiló,3,2025-05-24T01:06:41.042008,Associação dos Produtores do Núcleo Rural Lago Oeste (ASPROESTE)
+4,Pepino,4,2025-05-24T01:06:41.042220,Cooperativa Agroambiental Palmas do Lago Oeste (CooperPalmas)
+4,Couve,3,2025-05-24T01:06:41.042461,Cooperativa dos Produtores Rurais de Planaltina de Goiás e Região (Prorural)
+4,Abacate,5,2025-05-24T01:06:41.042669,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+4,Limão,3,2025-05-24T01:06:41.042877,Associação Agrícola do Distrito Federal e Ride (Agrifam)
+4,Cebola,5,2025-05-24T01:06:41.043077,Associação dos Trabalhadores Rurais da Agricultura Familiar do Assentamento Chapadinha (Astraf)
+5,Milho doce,3,2025-05-24T01:06:41.043286,associação de Agricultores Familiares da Eco Comunidade do Assentamento 15 de Agosto (Afeca)
+5,Mandioca,5,2025-05-24T01:06:41.043484,Associação dos Produtores Rurais Novo Horizonte Betinho (Aspronte)
+5,Morango,5,2025-05-24T01:06:41.043686,Associação dos Trabalhadores Rurais da Agricultura Familiar do Assentamento Chapadinha (Astraf)
+5,Tangerina,5,2025-05-24T01:06:41.043886,Cooperativa de Agricultura Familiar Mista do Distrito Federal (Coopermista)
+5,Gengibre,5,2025-05-24T01:06:41.044128,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+6,Milho doce,3,2025-05-24T01:06:41.044340,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+6,Agrião,5,2025-05-24T01:06:41.044544,Cooperativa Agrícola da Região de Planaltina (Cootaquara)
+6,Brócolis,3,2025-05-24T01:06:41.044746,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+6,Pitaia,3,2025-05-24T01:06:41.044949,associação de Agricultores Familiares da Eco Comunidade do Assentamento 15 de Agosto (Afeca)
+6,Graviola,4,2025-05-24T01:06:41.045152,Cooperativa Agropecuária da Região de Brazlândia (Coopebraz)
+7,Couve-flor,4,2025-05-24T01:06:41.045364,Cooperativa Agroambiental Palmas do Lago Oeste (CooperPalmas)
+7,Pimentão,5,2025-05-24T01:06:41.045563,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+7,Batata,5,2025-05-24T01:06:41.045766,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+7,Maracujá,3,2025-05-24T01:06:41.045970,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+7,Agrião,3,2025-05-24T01:06:41.046174,Cooperativa Mista da Agricultura Familiar do Meio Ambiente e da Cultura do Brasil
+8,Manga,3,2025-05-24T01:06:41.046402,Cooperativa de Agricultura Familiar Mista do Distrito Federal (Coopermista)
+8,Abóbora,3,2025-05-24T01:06:41.046602,Associação dos Produtores da Agricultura Familiar (Aspaf )
+8,Pimentão,3,2025-05-24T01:06:41.046802,"Cooperativa de Serviços Ambientais, Agricultura Familiar, Sociedade,Cultura e Saúde (CooperBrasilia)"
+8,Coentro,4,2025-05-24T01:06:41.047000,Associação dos Produtores Rurais de Alexandre Gusmão (AsSpag)
+8,Pepino,4,2025-05-24T01:06:41.047199,Cooperativa de Agricultura Familiar Mista do Distrito Federal (Coopermista)
+9,Gengibre,4,2025-05-24T01:06:41.047404,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+9,Cebolinha,5,2025-05-24T01:06:41.047603,Cooperativa Agroambiental Palmas do Lago Oeste (CooperPalmas)
+9,Mandioca,3,2025-05-24T01:06:41.047814,Cooperativa dos Produtores Rurais de Planaltina de Goiás e Região (Prorural)
+9,Chuchu,4,2025-05-24T01:06:41.048014,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+9,Graviola,4,2025-05-24T01:06:41.048211,Associação dos Produtores Rurais Novo Horizonte Betinho (Aspronte)
+10,Pimentão,3,2025-05-24T01:06:41.048413,Associação dos Produtores do Núcleo Rural Lago Oeste (ASPROESTE)
+10,Gengibre,4,2025-05-24T01:06:41.048641,Cooperativa Agroambiental Palmas do Lago Oeste (CooperPalmas)
+10,Pepino,5,2025-05-24T01:06:41.048843,"Cooperativa de Serviços Ambientais, Agricultura Familiar, Sociedade,Cultura e Saúde (CooperBrasilia)"
+10,Tomate,3,2025-05-24T01:06:41.049045,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+10,Morango,5,2025-05-24T01:06:41.049245,Associação dos Produtores Rurais Novo Horizonte Betinho (Aspronte)
+11,Mandioca,3,2025-05-24T01:10:19.217891,Associação dos Produtores do Núcleo Rural Lago Oeste (ASPROESTE)
+11,Cebolinha,5,2025-05-24T01:10:29.073228,"Cooperativa de Serviços Ambientais, Agricultura Familiar, Sociedade,Cultura e Saúde (CooperBrasilia)"
+11,Gengibre,4,2025-05-24T01:10:53.429342,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+11,Alho,1,2025-05-24T01:10:56.451232,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+11,Batata,5,2025-05-24T01:11:01.553298,"Cooperativa de Serviços Ambientais, Agricultura Familiar, Sociedade,Cultura e Saúde (CooperBrasilia)"
+12,Alho,3,2025-05-24T01:17:26.377051,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)
+12,Morango,2,2025-05-24T01:17:54.833603,Associação Agrícola do Distrito Federal e Ride (Agrifam)
+12,Batata,5,2025-05-24T01:18:06.513089,Associação dos Produtores de Hortigranjeiros do Distrito Federal (Asphor)

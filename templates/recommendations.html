@@ -3,19 +3,20 @@
 {% block title %}Resultados da Busca{% endblock %}
 {% block page_title %}✨ Resultados da Sua Busca ✨{% endblock %}
 
-{% set page_uses_map = True %} {# Indica ao layout.html para incluir scripts do mapa #}
+{% set page_uses_map = True %}
 
 {% block content %}
 <div class="info-box">
     {% if product_intent %}<p><strong>Produto buscado:</strong> {{ product_intent }}</p>{% endif %}
     {% if preferred_categories %}<p><strong>Categorias filtradas:</strong> {{ preferred_categories|join(', ') }}</p>{%
     endif %}
+    {% if organic_filter_checked %}<p><strong>Filtro:</strong> Apenas Orgânicos</p>{% endif %}
+    {% if family_farm_filter_checked %}<p><strong>Filtro:</strong> Apenas Agricultura Familiar</p>{% endif %}
     <p><strong>Sua Localização (para esta busca):</strong> Lat {{ "%.4f"|format(location[0]) }}, Lon {{
         "%.4f"|format(location[1]) }}</p>
     <p><strong>Distância máxima considerada:</strong> {{ max_distance }} km</p>
 </div>
 
-<!-- MAP CONTAINER com data attributes -->
 <div id="map" data-user-lat="{{ location[0] }}" data-user-lon="{{ location[1] }}"
     data-recommendations="{{ recommendations.to_json(orient='records', force_ascii=False) if recommendations is not none and not recommendations.empty else '[]' }}">
 </div>
@@ -31,17 +32,20 @@
     endif %}
     <p><strong>Preço Estimado:</strong> R$ {{ "%.2f"|format(rec['Price']|float) }}</p>
     <p><strong>Distância:</strong> {{ "%.1f"|format(rec['Distance_km']|float) }} km
-        <a href="https://www.google.com/maps/search/?api=1&query={{rec['Latitude']}},{{rec['Longitude']}}"
-            target="_blank" style="font-size:0.8em; margin-left:5px;">(Ver no Google Maps)</a>
+        <a href="http://maps.google.com/maps?q={{rec['Latitude']}},{{rec['Longitude']}}" target="_blank"
+            style="font-size:0.8em; margin-left:5px;">(Ver no Google Maps)</a>
     </p>
     <p>
         {% if rec['Organic'] %}🌿 Orgânico {% endif %}
         {% if rec['FamilyFarm'] %}👨‍🌾 Agricultura Familiar {% endif %}
+        {% if rec['Faz_Entrega'] %}🚚 Faz Entrega {% endif %}
     </p>
-    {# Scores de busca direta podem ser menos relevantes para o usuário, mas mantidos para debug
-    <p><em>Score Base: {{ "%.2f"|format(rec['BaseScore']|float) }} | Score Final: {{
-            "%.2f"|format(rec['RelevanceScore']|float) }}</em></p>
-    #}
+    {% if rec['Horario_Funcionamento_Atendimento'] and rec['Horario_Funcionamento_Atendimento'] != 'nan' %}
+    <p><strong>Horário de Atendimento:</strong> {{ rec['Horario_Funcionamento_Atendimento'] }}</p>
+    {% endif %}
+    {% if rec['Formas_Pagamento_Aceitas'] and rec['Formas_Pagamento_Aceitas'] != 'nan' %}
+    <p><strong>Pagamento:</strong> {{ rec['Formas_Pagamento_Aceitas'] }}</p>
+    {% endif %}
 
     {% set product_coop_key = (rec['ProductName'], rec['CooperativeName']) %}
     <form action="{{ url_for('rate_product') }}" method="post" class="rating-form">

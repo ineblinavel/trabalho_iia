@@ -23,7 +23,6 @@
 <div class="recommendation">
     <h3>🛒 {{ rec['ProductName'] }}</h3>
     <p><strong>Motivo:</strong> {{ rec['Reason'] }}</p>
-    <p style="margin-bottom: 10px;"><em>(Score de relevância: {{ "%.2f"|format(rec['RelevanceScore']|float) }})</em></p>
 
     <hr style="border:0; border-top: 1px dashed #eee; margin: 10px 0;">
 
@@ -32,13 +31,20 @@
     endif %}
     <p><strong>Preço Estimado:</strong> R$ {{ "%.2f"|format(rec['Price']|float) }}</p>
     <p><strong>Distância:</strong> {{ "%.1f"|format(rec['Distance_km']|float) }} km
-        <a href="https://www.google.com/maps/search/?api=1&query={{rec['Latitude']}},{{rec['Longitude']}}"
-            target="_blank" style="font-size:0.8em; margin-left:5px;">(Ver no Google Maps)</a>
+        <a href="http://maps.google.com/maps?q={{rec['Latitude']}},{{rec['Longitude']}}" target="_blank"
+            style="font-size:0.8em; margin-left:5px;">(Ver no Google Maps)</a>
     </p>
     <p>
         {% if rec['Organic'] %}🌿 Orgânico {% endif %}
         {% if rec['FamilyFarm'] %}👨‍🌾 Agricultura Familiar {% endif %}
+        {% if rec['Faz_Entrega'] %}🚚 Faz Entrega {% endif %}
     </p>
+    {% if rec['Horario_Funcionamento_Atendimento'] and rec['Horario_Funcionamento_Atendimento'] != 'nan' %}
+    <p><strong>Horário de Atendimento:</strong> {{ rec['Horario_Funcionamento_Atendimento'] }}</p>
+    {% endif %}
+    {% if rec['Formas_Pagamento_Aceitas'] and rec['Formas_Pagamento_Aceitas'] != 'nan' %}
+    <p><strong>Pagamento:</strong> {{ rec['Formas_Pagamento_Aceitas'] }}</p>
+    {% endif %}
 
     {% set product_coop_key = (rec['ProductName'], rec['CooperativeName']) %}
     <form action="{{ url_for('rate_product') }}" method="post" class="rating-form">
