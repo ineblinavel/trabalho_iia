@@ -3,7 +3,7 @@ import pandas as pd
 import recommender_logic as rl
 import secrets
 from datetime import datetime
-import json # Para lidar com as preferências do usuário no app.py também
+import json
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -16,7 +16,6 @@ MIN_RATINGS_FOR_PERSONALIZED = 1
 def get_current_user_id():
     if 'user_id' not in session:
         new_user_id_val = 1
-        # Busca o maior ID de usuário existente nos ratings e preferências
         max_id_ratings = 0
         if not rl.df_ratings_global.empty and 'user_id' in rl.df_ratings_global.columns:
             valid_user_ids = rl.df_ratings_global['user_id'].dropna()
@@ -117,10 +116,10 @@ def search_route():
         max_dist = int(request.args.get('max_distance', DEFAULT_MAX_DIST_KM))
         product_intent = request.args.get('search_intent_product')
         preferred_categories = request.args.getlist('preferred_categories_search')
-        # Checkbox value 'on' é quando está marcado, 'None' quando não está
+        # Checkbox value 'on' é quando está marcado
         organic_filter = request.args.get('organic_filter') == 'on' 
         family_farm_filter = request.args.get('family_farm_filter') == 'on' 
-    else: # request.method == 'POST'
+    else: 
         try:
             lat = float(request.form.get('latitude', DEFAULT_LAT))
             lon = float(request.form.get('longitude', DEFAULT_LON))

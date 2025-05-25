@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const mapElement = document.getElementById('map');
     if (!mapElement) {
@@ -30,21 +29,19 @@ document.addEventListener('DOMContentLoaded', function () {
         attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    // --- Create a custom red icon for the user's location ---
+    // --- Cria um ícone vermelho customizado para a localização do usuário ---
     const redIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', // URL for a red marker icon
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', // Standard shadow
-        iconSize: [25, 41],    // Size of the icon
-        iconAnchor: [12, 41],  // Point of the icon which will correspond to marker's location
-        popupAnchor: [1, -34], // Point from which the popup should open relative to the iconAnchor
-        shadowSize: [41, 41]   // Size of the shadow
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', // URL para um ícone de marcador vermelho
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', // Sombra padrão
+        iconSize: [25, 41],    // Tamanho do ícone
+        iconAnchor: [12, 41],  // Ponto do ícone que corresponderá à localização do marcador
+        popupAnchor: [1, -34], // Ponto a partir do qual o popup deve abrir em relação ao iconAnchor
+        shadowSize: [41, 41]   // Tamanho da sombra
     });
 
-    // Add a marker for the user's location using the custom red icon
-    L.marker([userLat, userLon], { icon: redIcon }).addTo(map) // Apply the custom icon here
+    L.marker([userLat, userLon], { icon: redIcon }).addTo(map)
         .bindPopup('<b>Sua Localização</b>');
 
-    // Add markers for each recommendation (using default blue icon)
     if (recommendationsData && recommendationsData.length > 0) {
         const markers = [];
         recommendationsData.forEach(function (rec) {
@@ -56,17 +53,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (typeof lat === 'number' && !isNaN(lat) &&
                 typeof lon === 'number' && !isNaN(lon)) {
 
-                const marker = L.marker([lat, lon]).addTo(map) // Default icon for recommendations
+                const marker = L.marker([lat, lon]).addTo(map)
                     .bindPopup(`<b>${coopName}</b><br>Produto: ${productName}`);
                 markers.push(marker);
             } else {
-                console.warn("Skipping recommendation due to invalid coordinates:", rec);
+                console.warn("Pulando recomendação devido a coordenadas inválidas:", rec);
             }
         });
-        // Optional fitBounds
-        // if (markers.length > 0) {
-        //    const group = new L.featureGroup(markers);
-        //    map.fitBounds(group.getBounds().pad(0.2));
-        // }
+        
     }
 });

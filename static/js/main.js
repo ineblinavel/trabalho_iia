@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         latitudeInput.value = lat.toFixed(6); // 6 casas decimais para precisão
                         longitudeInput.value = lon.toFixed(6);
                         locationStatus.textContent = 'Localização obtida com sucesso!';
-                        locationStatus.style.color = '#4CAF50'; // Verde para sucesso
+                        locationStatus.style.color = '#4CAF50';
                         getLocationBtn.disabled = false; // Reabilita o botão
                     },
                     function (error) {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 break;
                         }
                         locationStatus.textContent = errorMessage;
-                        locationStatus.style.color = '#d9534f'; // Vermelho para erro
+                        locationStatus.style.color = '#d9534f';
                         getLocationBtn.disabled = false; // Reabilita o botão
                     },
                     {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
             } else {
                 locationStatus.textContent = 'Geolocalização não é suportada por este navegador.';
-                locationStatus.style.color = '#f0ad4e'; // Laranja para aviso
+                locationStatus.style.color = '#f0ad4e';
             }
         });
     }

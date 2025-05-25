@@ -1,4 +1,3 @@
-# recommender_logic.py
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -8,38 +7,34 @@ from geopy.distance import geodesic
 import random
 from datetime import datetime
 import os
-import json # Para salvar e carregar user_initial_preferences
+import json
 
-# Variáveis globais para os modelos e dados pré-processados
 df_cooperativas = pd.DataFrame()
 df_produtos_features = pd.DataFrame()
-df_ratings_global = pd.DataFrame() # Para armazenar todos os ratings
+df_ratings_global = pd.DataFrame() 
 all_available_products = []
 product_to_idx = {}
 cosine_sim_matrix = None
 svd_model = None
 
-# --- DADOS DE PREFERÊNCIAS INICIAIS (SIMULADO E AGORA PERSISTENTE) ---
-user_initial_preferences = {} # user_id: {'categories': ['Fruta', 'Verdura'], 'location': (lat, lon)}
+user_initial_preferences = {} 
 
-# Nomes dos arquivos de persistência
 RATINGS_FILE = 'data/user_ratings.csv'
-PREFERENCES_FILE = 'data/user_preferences.json' # Usamos JSON para a estrutura mais complexa
+PREFERENCES_FILE = 'data/user_preferences.json' 
 
 def load_and_preprocess_data():
     global df_cooperativas, df_produtos_features, all_available_products, product_to_idx, cosine_sim_matrix, svd_model, df_ratings_global, user_initial_preferences
 
-    # Garante que o diretório 'data' exista
     os.makedirs('data', exist_ok=True)
 
     try:
-        df_cooperativas_raw = pd.read_csv("produtos_cooperativas_preenchido_precos_similares.csv")
-        df_produtos_features_raw = pd.read_csv("produtos.csv")
+        df_cooperativas_raw = pd.read_csv("./data/input/produtos_cooperativas_preenchido_precos_similares.csv") #
+        df_produtos_features_raw = pd.read_csv("./data/input/produtos.csv") #
     except FileNotFoundError:
         print("ERRO: Arquivos CSV de base não encontrados. Certifique-se de que 'produtos_cooperativas_preenchido_precos_similares.csv' e 'produtos.csv' estão no local correto.")
         return False
 
-    # Preprocessing df_cooperativas_raw (simplificado)
+    # Preprocessing df_cooperativas_raw
     metadata_cols = ['Nome', 'Latitude', 'Longitude', 'Tipo_Organizacao', 'Ano_Fundacao',
                      'Certificacao_Organica_Geral', 'Selo_Agricultura_Familiar_Possui',
                      'Horario_Funcionamento_Atendimento', 'Regioes_Entrega',
@@ -65,11 +60,10 @@ def load_and_preprocess_data():
     df_cooperativas.rename(columns={'Nome': 'Nome_Cooperativa'}, inplace=True)
     all_available_products = sorted(df_cooperativas['Nome_Produto'].unique())
 
-    # Preprocessing df_produtos_features
     df_produtos_features = df_produtos_features_raw.copy()
-    df_produtos_features.set_index('Nome_Produto', inplace=True)
+    df_produtos_features.set_index('Nome_Produto', inplace=True) #
     feature_cols_for_CB = ['Categoria_Produto', 'Subcategoria_Produto', 'Perfil_Sabor_Predominante',
-                           'Textura_Predominante', 'Cor_Predominante_Visual', 'Uso_Culinario_Principal']
+                           'Textura_Predominante', 'Cor_Predominante_Visual', 'Uso_Culinario_Principal'] #
     
     for col in feature_cols_for_CB:
         if col not in df_produtos_features.columns:
@@ -85,11 +79,10 @@ def load_and_preprocess_data():
             df_produtos_features.loc[p_name, 'Combined_Features'] = "Informacao Indisponivel"
             df_produtos_features.loc[p_name, 'Categoria_Produto'] = "Desconhecida"
 
-    # --- CARREGAR RATINGS E PREFERÊNCIAS PERSISTIDOS ---
     if os.path.exists(RATINGS_FILE):
         try:
             # Use parse_dates para carregar a coluna 'timestamp' como datetime
-            df_ratings_global = pd.read_csv(RATINGS_FILE, parse_dates=['timestamp'])
+            df_ratings_global = pd.read_csv(RATINGS_FILE, parse_dates=['timestamp']) #
             print(f"Ratings carregados de {RATINGS_FILE}. Total: {len(df_ratings_global)}")
         except Exception as e:
             print(f"Erro ao carregar ratings de {RATINGS_FILE}: {e}. Iniciando com DataFrame vazio.")
@@ -102,8 +95,6 @@ def load_and_preprocess_data():
         try:
             with open(PREFERENCES_FILE, 'r') as f:
                 loaded_prefs = json.load(f)
-                # Converte chaves de str para int, pois IDs de usuário são int
-                # E converte a lista de localização de volta para tupla
                 user_initial_preferences = {int(k): {'name': v.get('name', ''), 
                                                      'categories': v.get('categories', []), 
                                                      'location': tuple(v['location']) if isinstance(v.get('location'), list) else None} 
@@ -116,11 +107,9 @@ def load_and_preprocess_data():
         print(f"Arquivo de preferências '{PREFERENCES_FILE}' não encontrado. Iniciando com preferências vazias.")
         user_initial_preferences = {}
             
-    # Simular alguns ratings iniciais se df_ratings_global ainda estiver vazio (após tentar carregar)
     if df_ratings_global.empty and all_available_products:
-        print("Gerando e simulando alguns ratings iniciais para o modelo SVD para atender ao requisito de 5000 linhas...")
+        print("Gerando e simulando alguns ratings iniciais para o modelo SVD...")
         
-        # Aumentar o número de usuários simulados e/ou ratings por usuário para atingir 5000+ linhas
         num_initial_users_simulated = 500 
         min_ratings_per_user = 10 
         
@@ -147,13 +136,12 @@ def load_and_preprocess_data():
                     'cooperative_name': coop_name
                 })
         df_ratings_global = pd.DataFrame(ratings_init_data)
-        save_ratings_to_csv() # Salva os ratings simulados
+        save_ratings_to_csv() 
         print(f"Gerados {len(df_ratings_global)} ratings simulados e salvos em {RATINGS_FILE}.")
     elif df_ratings_global.empty:
         print("AVISO: Nenhum produto disponível, ratings simulados não gerados.")
 
 
-    # Treinar SVD
     if not df_ratings_global.empty:
         reader = Reader(rating_scale=(1, 5))
         data = Dataset.load_from_df(df_ratings_global[['user_id', 'item_id', 'rating']], reader)
@@ -166,7 +154,6 @@ def load_and_preprocess_data():
         print("Modelo SVD não treinado (sem ratings).")
 
 
-    # Content-Based
     if all_available_products and not df_produtos_features.empty:
         valid_products_for_tfidf = [p for p in all_available_products if p in df_produtos_features.index]
         if valid_products_for_tfidf:
@@ -190,11 +177,10 @@ def load_and_preprocess_data():
 
     return True
 
-# --- FUNÇÕES DE PERSISTÊNCIA ---
 def save_ratings_to_csv():
     global df_ratings_global
     df_to_save = df_ratings_global.copy()
-    df_to_save['timestamp'] = df_to_save['timestamp'].apply(lambda x: x.isoformat()) # Correção para isoformat
+    df_to_save['timestamp'] = df_to_save['timestamp'].apply(lambda x: x.isoformat()) # Garante formato ISO para timestamp
     df_to_save.to_csv(RATINGS_FILE, index=False)
     print(f"Ratings salvos em {RATINGS_FILE}.")
 
@@ -209,7 +195,6 @@ def save_preferences_to_json():
         json.dump(serializable_prefs, f, indent=4)
     print(f"Preferências de usuário salvas em {PREFERENCES_FILE}.")
 
-# --- FUNÇÕES DE RECOMENDAÇÃO (com Opção 1 para razão) ---
 
 def predict_cf_score(user_id, product_name, model, min_rating=1, max_rating=5):
     if model is None: return 0.5
@@ -251,7 +236,8 @@ def get_recommendation_reason(user_id, product_name, cf_score, cb_score, like_ra
     reasons = []
     global df_ratings_global, df_produtos_features, product_to_idx, cosine_sim_matrix
 
-    if cb_score > 0.1: # Se CB contribuiu
+    # Se CB contribuiu significativamente
+    if cb_score > 0.1: 
         user_highly_rated_products_df = df_ratings_global[
             (df_ratings_global['user_id'] == user_id) & (df_ratings_global['rating'] >= like_rating_threshold)
         ]
@@ -283,15 +269,17 @@ def get_recommendation_reason(user_id, product_name, cf_score, cb_score, like_ra
                      reasons.append("Baseado nas características de produtos que você gostou.")
 
 
-    if cf_score > 0.7 and cb_score < 0.5 :
+    if cf_score > 0.7 and cb_score < 0.5 : # CF mais forte e CB mais fraco
         reasons.append("Outros usuários com gostos parecidos com os seus também apreciaram este produto.")
-    elif cf_score > 0.5 and not reasons:
+    elif cf_score > 0.5 and not reasons: # CF com alguma força e sem razão CB
          reasons.append("Pode ser do seu interesse com base nas avaliações de outros usuários.")
 
+    # Preferências de categoria explícitas
     if user_id in user_initial_preferences and 'categories' in user_initial_preferences[user_id]:
         prod_cat = df_produtos_features.loc[product_name, 'Categoria_Produto'] if product_name in df_produtos_features.index and 'Categoria_Produto' in df_produtos_features.columns else None
         if prod_cat and prod_cat in user_initial_preferences[user_id]['categories']:
-            if not reasons or "você demonstrou interesse na categoria" not in reasons[0]:
+            # Adiciona apenas se a razão não for primariamente sobre categoria já
+            if not reasons or "você demonstrou interesse na categoria" not in reasons[0]: 
                 reasons.append(f"Recomendado porque você demonstrou interesse na categoria '{prod_cat}'.")
 
 
@@ -319,7 +307,7 @@ def generate_personalized_recommendations(user_id, alpha=0.6, beta=0.4, top_n=10
         if user_id in user_initial_preferences and 'categories' in user_initial_preferences[user_id]:
             prod_cat = df_produtos_features.loc[product_name, 'Categoria_Produto'] if product_name in df_produtos_features.index and 'Categoria_Produto' in df_produtos_features.columns else None
             if prod_cat and prod_cat in user_initial_preferences[user_id]['categories']:
-                category_boost = 0.1
+                category_boost = 0.1 # Boost para categorias preferidas
 
         hybrid_score = combine_scores(cf_score, cb_score, alpha, beta) + category_boost
         recommendations.append({
@@ -338,26 +326,26 @@ def get_popular_products_df(top_n=10):
     global df_ratings_global, all_available_products
     if df_ratings_global.empty or df_ratings_global['item_id'].nunique() < 2:
         if not all_available_products: return pd.DataFrame()
+        # Fallback para produtos aleatórios se não houver ratings suficientes
         sample_prods = random.sample(all_available_products, min(top_n, len(all_available_products)))
         return pd.DataFrame([{
             'ProductName': p, 
-            'RelevanceScore': 0.5,
+            'RelevanceScore': 0.5, # Score neutro
             'cf_score':0, 'cb_score':0} for p in sample_prods])
 
     product_stats = df_ratings_global.groupby('item_id')['rating'].agg(['mean', 'count']).reset_index()
-    min_ratings = 2
+    min_ratings = 2 # Mínimo de avaliações para ser considerado popular
     popular = product_stats[product_stats['count'] >= min_ratings]
     popular = popular.sort_values(by=['mean', 'count'], ascending=[False, False]).head(top_n)
     
     return pd.DataFrame([{
         'ProductName': row['item_id'],
-        'RelevanceScore': row['mean'] / 5.0,
-        'cf_score':0, 'cb_score':0
+        'RelevanceScore': row['mean'] / 5.0, # Normaliza a média da avaliação
+        'cf_score':0, 'cb_score':0 # Scores CF/CB não aplicáveis diretamente aqui
     } for _, row in popular.iterrows()])
 
 
 def get_final_recommendations_with_coops(user_id, user_lat, user_lon, max_dist_km, recommendations_df, recommendation_type="personalized"):
-    """Junta recomendações de produtos com informações das cooperativas e aplica filtros."""
     global df_cooperativas
     if recommendations_df.empty:
         return pd.DataFrame()
@@ -384,7 +372,7 @@ def get_final_recommendations_with_coops(user_id, user_lat, user_lon, max_dist_k
                 reason = "Um dos produtos mais populares da plataforma!"
             elif recommendation_type == "popular_fallback":
                  reason = "Este é um produto popular, pois não conseguimos gerar recomendações personalizadas ainda."
-            else: # recommendation_type == "personalized"
+            else: 
                 reason = get_recommendation_reason(user_id, product_name, rec_product_row['cf_score'], rec_product_row['cb_score'])
             
             output_recs.append({
@@ -413,7 +401,6 @@ def get_final_recommendations_with_coops(user_id, user_lat, user_lon, max_dist_k
 
 
 def search_products_in_cooperatives(user_lat, user_lon, max_dist_km, product_intent=None, preferred_categories=None, organic_filter=False, family_farm_filter=False):
-    """Busca cooperativas com base em intenção de produto e categorias, filtradas por distância e novos filtros."""
     global df_cooperativas, df_produtos_features
     
     relevant_coops = df_cooperativas.copy()
@@ -427,11 +414,11 @@ def search_products_in_cooperatives(user_lat, user_lon, max_dist_km, product_int
         relevant_coops = relevant_coops[relevant_coops['Nome_Produto'] == product_intent]
 
     if not relevant_coops.empty and preferred_categories:
+        # Junta com features para filtrar por categoria
         relevant_coops = pd.merge(relevant_coops, df_produtos_features[['Categoria_Produto']], 
                                   left_on='Nome_Produto', right_index=True, how='left')
         relevant_coops = relevant_coops[relevant_coops['Categoria_Produto'].isin(preferred_categories)]
 
-    # Aplicar novos filtros
     if not relevant_coops.empty and organic_filter:
         relevant_coops = relevant_coops[relevant_coops['Certificacao_Organica_Geral'] >= 1]
     
@@ -462,6 +449,7 @@ def search_products_in_cooperatives(user_lat, user_lon, max_dist_km, product_int
 
 def add_rating_logic(user_id, product_name, cooperative_name, rating_value):
     global df_ratings_global
+    # Remove avaliação anterior do mesmo usuário para o mesmo produto/cooperativa, se houver
     df_ratings_global = df_ratings_global[~((df_ratings_global['user_id'] == user_id) & 
                                             (df_ratings_global['item_id'] == product_name) &
                                             (df_ratings_global['cooperative_name'] == cooperative_name))]
@@ -475,8 +463,9 @@ def add_rating_logic(user_id, product_name, cooperative_name, rating_value):
     }])
     df_ratings_global = pd.concat([df_ratings_global, new_rating], ignore_index=True)
     
-    save_ratings_to_csv() # Salva após adicionar/atualizar
+    save_ratings_to_csv() 
     
+    # Retreina o modelo SVD com os novos dados
     if not df_ratings_global.empty:
         global svd_model
         reader = Reader(rating_scale=(1, 5))
@@ -503,8 +492,7 @@ def get_user_ratings_df(user_id):
 
 def calculate_distance_km(lat1, lon1, lat2, lon2):
     if pd.isna(lat1) or pd.isna(lon1) or pd.isna(lat2) or pd.isna(lon2):
-        return float('inf')
+        return float('inf') # Retorna infinito se alguma coordenada for NaN
     return geodesic((lat1, lon1), (lat2, lon2)).km
 
-# Chama a função de carregamento na inicialização
 load_and_preprocess_data()
