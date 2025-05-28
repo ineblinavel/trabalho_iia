@@ -28,10 +28,10 @@ def load_and_preprocess_data():
     os.makedirs('data', exist_ok=True)
 
     try:
-        df_cooperativas_raw = pd.read_csv("./data/input/produtos_cooperativas_preenchido_precos_similares.csv") #
+        df_cooperativas_raw = pd.read_csv("./data/input/produtos_cooperativas.csv") #
         df_produtos_features_raw = pd.read_csv("./data/input/produtos.csv") #
     except FileNotFoundError:
-        print("ERRO: Arquivos CSV de base não encontrados. Certifique-se de que 'produtos_cooperativas_preenchido_precos_similares.csv' e 'produtos.csv' estão no local correto.")
+        print("ERRO: Arquivos CSV de base não encontrados. Certifique-se de que 'produtos_cooperativas.csv' e 'produtos.csv' estão no local correto.")
         return False
 
     # Preprocessing df_cooperativas_raw

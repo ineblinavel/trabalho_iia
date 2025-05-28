@@ -27,5 +27,27 @@
             -15.7797,
             -47.9297
         ]
+    },
+    "502": {
+        "name": "",
+        "categories": [
+            "Legume (culin\u00e1rio)/Fruta (bot\u00e2nico)"
+        ],
+        "location": [
+            -15.909477959274536,
+            -47.75854548778892
+        ]
+    },
+    "503": {
+        "name": "Luan",
+        "categories": [
+            "Erva Arom\u00e1tica/Tempero",
+            "Gr\u00e3o/Cereal",
+            "Raiz"
+        ],
+        "location": [
+            -15.909477959274536,
+            -47.75854548778892
+        ]
     }
 }
